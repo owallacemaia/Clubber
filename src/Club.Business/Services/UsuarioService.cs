@@ -27,7 +27,10 @@ namespace Club.Business.Services
 
         public async Task<bool> Atualizar(Usuario usuario)
         {
-            throw new NotImplementedException();
+            if (!ExecutarValidacao(new UsuarioValidation(), usuario)) return false;
+
+            await _usuarioRepository.Atualizar(usuario);
+            return true;
         }
 
         public void Dispose()

@@ -26,7 +26,6 @@ namespace Club.WebApi.ViewModels
         public int Tipo { get; set; }
 
         public Guid UsuarioId { get; set; }
-        public UsuarioViewModel Usuario { get; set; }
         public IEnumerable<PostViewModel> Posts { get; set; }
     }
 }

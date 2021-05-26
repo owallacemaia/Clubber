@@ -4,6 +4,7 @@ using Club.Business.Models;
 using Club.Business.Services;
 using Club.WebApi.Configuration;
 using Club.WebApi.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -24,6 +25,8 @@ namespace Club.WebApi.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
         private readonly IUsuarioService _usuarioService;
+        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IMapper _mapper;
 
         public AuthController(INotificador notificador,
             UserManager<IdentityUser> userManager,
@@ -31,12 +34,15 @@ namespace Club.WebApi.Controllers
             IOptions<AppSettings> appSettings,
             IUser user,
             IMapper mapper,
-            IUsuarioService usuarioService) : base(notificador, user)
+            IUsuarioService usuarioService,
+            IUsuarioRepository usuarioRepository) : base(notificador, user)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _appSettings = appSettings.Value;
             _usuarioService = usuarioService;
+            _mapper = mapper;
+            _usuarioRepository = usuarioRepository;
         }
 
         [HttpPost("nova-conta")]
@@ -56,7 +62,7 @@ namespace Club.WebApi.Controllers
 
             if (result.Succeeded)
             {
-                var usuario = new Usuario(Guid.Parse(user.Id), registerUser.Nome, registerUser.Celular, registerUser.DataNascimento, registerUser.Celular);
+                var usuario = new Usuario(Guid.Parse(user.Id), registerUser.NomeUsuario, registerUser.Nome, registerUser.DataNascimento, registerUser.Celular);
                 await _usuarioService.Adicionar(usuario);
             }
 
@@ -94,6 +100,47 @@ namespace Club.WebApi.Controllers
 
             NotificarErro("Usuário ou senha incorretos");
             return CustomResponse();
+        }
+
+        [Authorize]
+        [HttpGet("obter-usuario/{id:guid}")]
+        public async Task<ActionResult<UsuarioViewModel>> ObterUsuarioPorId(Guid id)
+        {
+            var usuario = await _usuarioRepository.ObterUsuarioGrupos(id);
+
+            if (usuario.Id != id)
+            {
+                NotificarErro("O Id do usuário informado esta errado!");
+                return CustomResponse();
+            }
+
+            var usuarioViewModel = _mapper.Map<UsuarioViewModel>(usuario);
+
+            return CustomResponse(usuarioViewModel);
+        }
+
+        [Authorize]
+        [HttpPut("atualizar-usuario/{id:guid}")]
+        public async Task<ActionResult<UsuarioViewModel>> AtualizarUsuario(Guid id, UsuarioViewModel usuarioViewModel)
+        {
+            if (!ModelState.IsValid) return CustomResponse(usuarioViewModel);
+
+            var usuario = await _usuarioRepository.ObterPorId(id);
+            var usuarioIdentity = await _userManager.FindByIdAsync(id.ToString());
+            if (usuario.Id != usuarioViewModel.Id)
+            {
+                NotificarErro("Usuario não esta correto");
+                return CustomResponse();
+            }
+
+            var result = await _userManager.SetUserNameAsync(usuarioIdentity, usuarioViewModel.NomeUsuario);
+
+            if (result.Succeeded)
+            {
+                await _usuarioService.Atualizar(_mapper.Map<Usuario>(usuarioViewModel));
+            }
+
+            return CustomResponse(usuarioViewModel);
         }
 
         private async Task<LoginResponseViewModel> GerarJwt(string email)

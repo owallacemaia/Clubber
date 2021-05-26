@@ -32,7 +32,7 @@ namespace Club.WebApi
 
             if (hostEnvironment.IsDevelopment())
             {
-                builder.AddUserSecrets<Startup>();
+                //builder.AddUserSecrets<Startup>();
             }
 
             Configuration = builder.Build();

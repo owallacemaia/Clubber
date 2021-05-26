@@ -12,25 +12,4 @@ namespace Club.Business.Interfaces
         Task<Post> ObterPostUsuario(Guid usuarioId);
         Task<IEnumerable<Post>> ObterTodosPostsUsuario(); 
     }
-
-    public interface IPostFeedRepository : IRepository<PostFeed>
-    {
-        Task<PostFeed> ObterPostUsuario(Guid usuarioId);
-        Task<IEnumerable<PostFeed>> ObterTodosPostsUsuario();
-    }
-
-    public interface IGrupoRepository : IRepository<Grupo>
-    {
-        Task<IEnumerable<Grupo>> ObterGruposUsuario();
-        Task<Grupo> ObterGrupoUsuario(Guid usuarioId);
-    }
-
-    public interface ISeguidoresRepository : IRepository<Seguidor>
-    {
-        Task<IEnumerable<IEnumerable<Seguidor>>> ObterSeguidores();
-        Task<IEnumerable<IEnumerable<Seguidor>>> ObterSeguindo();
-    }
-    public interface IUsuarioRepository : IRepository<Usuario>
-    {
-    }
 }
