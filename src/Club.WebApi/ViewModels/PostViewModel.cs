@@ -21,8 +21,9 @@ namespace Club.WebApi.ViewModels
         [DataType(DataType.DateTime)]
         public DateTime DataPublicacao { get; set; }
 
-        [HiddenInput]
         public Guid UsuarioId { get; set; }
+
+        public UsuarioInfoViewModel Usuario { get; set; }
         [HiddenInput]
         public Guid GrupoId { get; set; }
     }

@@ -53,6 +53,14 @@ namespace Club.WebApi.Controllers
             return CustomResponse(posts);
         }
 
+        [HttpGet("grupo/{id:guid}")]
+        public async Task<IEnumerable<PostViewModel>> ObterPostsGrupo(Guid id)
+        {
+            var posts = _mapper.Map<IEnumerable<PostViewModel>>(await _postRepository.ObterPostsGrupo(id));
+
+            return (posts);
+        }
+
         [HttpPost("cadastrar")]
         public async Task<ActionResult<PostViewModel>> Adicionar(PostViewModel postViewModel)
         {
@@ -68,6 +76,7 @@ namespace Club.WebApi.Controllers
 
             var post = _mapper.Map<Post>(postViewModel);
             post.UsuarioId = usuario.Id;
+            post.DataPublicacao = DateTime.UtcNow;
 
             await _postService.Adicionar(post);
 
@@ -109,6 +118,12 @@ namespace Club.WebApi.Controllers
             if (post == null)
             {
                 NotificarErro("Houve um problema ao tentar remover o grupo!");
+                return CustomResponse();
+            }
+
+            if(post.UsuarioId != AppUser.GetUserId())
+            {
+                NotificarErro("Esse post não pertence a este usuario");
                 return CustomResponse();
             }
 

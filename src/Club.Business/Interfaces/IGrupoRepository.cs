@@ -9,5 +9,6 @@ namespace Club.Business.Interfaces
     {
         Task<IEnumerable<Grupo>> ObterGruposUsuario();
         Task<Grupo> ObterGrupoUsuario(Guid usuarioId);
+        Task<Grupo> ObterGrupoPosts(Guid grupoId);
     }
 }

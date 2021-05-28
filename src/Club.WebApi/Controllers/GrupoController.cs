@@ -43,8 +43,7 @@ namespace Club.WebApi.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<GrupoViewModel>> ObterPorId(Guid id)
         {
-            var grupo = _mapper.Map<GrupoViewModel>(await _grupoRepository.ObterPorId(id));
-
+            var grupo = _mapper.Map<GrupoViewModel>(await _grupoRepository.ObterGrupoPosts(id));
             if (grupo == null)
             {
                 NotificarErro("O Grupo não foi encotrado");

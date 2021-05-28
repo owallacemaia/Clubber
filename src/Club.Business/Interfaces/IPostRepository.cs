@@ -10,6 +10,7 @@ namespace Club.Business.Interfaces
     public interface IPostRepository : IRepository<Post>
     {
         Task<Post> ObterPostUsuario(Guid usuarioId);
-        Task<IEnumerable<Post>> ObterTodosPostsUsuario(); 
+        Task<IEnumerable<Post>> ObterTodosPostsUsuario();
+        Task<IEnumerable<Post>> ObterPostsGrupo(Guid grupoId);
     }
 }

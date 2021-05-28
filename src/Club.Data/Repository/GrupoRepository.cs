@@ -13,6 +13,14 @@ namespace Club.Data.Repository
     public class GrupoRepository : Repository<Grupo>, IGrupoRepository
     {
         public GrupoRepository(ClubberContext context) : base(context) { }
+
+        public async Task<Grupo> ObterGrupoPosts(Guid grupoId)
+        {
+            return await Db.Grupos.AsNoTracking()
+                .Include(a => a.Posts.OrderBy(a => a.DataPublicacao))
+                .FirstOrDefaultAsync(a => a.Id == grupoId);
+        }
+
         public async Task<IEnumerable<Grupo>> ObterGruposUsuario()
         {
             return await Db.Grupos.AsNoTracking()

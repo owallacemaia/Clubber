@@ -13,6 +13,13 @@ namespace Club.Data.Repository
     {
         public PostRepository(ClubberContext context) : base(context) { }
 
+        public async Task<IEnumerable<Post>> ObterPostsGrupo(Guid grupoId)
+        {
+            return await Db.Posts.AsNoTracking()
+                .Include(a => a.Usuario)
+                .OrderBy(a => a.DataPublicacao).Where(a => a.GrupoId == grupoId).ToListAsync();
+        }
+
         public async Task<Post> ObterPostUsuario(Guid usuarioId)
         {
             return await Db.Posts.AsNoTracking()
