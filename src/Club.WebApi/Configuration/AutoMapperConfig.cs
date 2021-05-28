@@ -12,6 +12,7 @@ namespace Club.WebApi.Configuration
             CreateMap<PostFeed, PostFeedViewModel>().ReverseMap();
             CreateMap<Grupo, GrupoViewModel>().ReverseMap();
             CreateMap<Usuario, UsuarioViewModel>().ReverseMap();
+            CreateMap<Usuario, UsuarioInfoViewModel>().ReverseMap();
         }
     }
 }

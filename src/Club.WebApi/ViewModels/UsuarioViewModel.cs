@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Club.WebApi.ViewModels
@@ -25,10 +26,13 @@ namespace Club.WebApi.ViewModels
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public DateTime DataNascimento { get; set; }
 
-        [StringLength(200, ErrorMessage = "o campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 6)]
+        [StringLength(200, ErrorMessage = "o campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 0)]
         public string Biografia { get; set; }
 
-        [StringLength(200, ErrorMessage = "o campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 6)]
+        [StringLength(200, ErrorMessage = "o campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 0)]
         public string Site { get; set; }
+
+        public IEnumerable<GrupoViewModel> Grupos{ get; set; }
+        public IEnumerable<PostViewModel> Posts { get; set; }
     }
 }
