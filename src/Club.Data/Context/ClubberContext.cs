@@ -17,6 +17,7 @@ namespace Club.Data.Context
         public DbSet<PostFeed> PostsFeed { get; set; }
         public DbSet<Seguidor> Seguidores { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Integrante> Integrantes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
