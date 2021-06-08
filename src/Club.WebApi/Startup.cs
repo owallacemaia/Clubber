@@ -51,11 +51,13 @@ namespace Club.WebApi
             services.AddScoped<IGrupoRepository, GrupoRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IPostFeedRepository, PostFeedRepository>();
+            services.AddScoped<IIntegranteRepository, IntegranteRepository>();
 
             services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IGrupoService, GrupoService>();
+            services.AddScoped<IIntegranteService, IntegranteService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUser, AspNetUser>();

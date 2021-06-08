@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Club.WebApi.Controllers
@@ -16,20 +17,26 @@ namespace Club.WebApi.Controllers
     {
         private readonly IGrupoRepository _grupoRepository;
         private readonly IGrupoService _grupoService;
+        private readonly IIntegranteService _integranteService;
         private readonly IMapper _mapper;
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IIntegranteRepository _integranteRepository;
 
         public GrupoController(IGrupoRepository grupoRepository,
             IGrupoService grupoService,
             IMapper mapper,
             INotificador notificador,
             IUser user,
-            IUsuarioRepository usuarioRepository) : base(notificador, user)
+            IUsuarioRepository usuarioRepository,
+            IIntegranteService integranteService,
+            IIntegranteRepository integranteRepository) : base(notificador, user)
         {
             _usuarioRepository = usuarioRepository;
             _mapper = mapper;
             _grupoRepository = grupoRepository;
             _grupoService = grupoService;
+            _integranteService = integranteService;
+            _integranteRepository = integranteRepository;
         }
 
         [HttpGet]
@@ -116,6 +123,41 @@ namespace Club.WebApi.Controllers
 
             return CustomResponse();
         } 
+
+        [HttpPost("entrar/{id:guid}")]
+        public async Task<ActionResult<Integrante>> EntrarGrupo(Guid id)
+        {
+            var grupo = await _grupoRepository.ObterPorId(id);
+
+            if(grupo == null)
+            {
+                NotificarErro("Grupo inexistente");
+                return CustomResponse();
+            }
+
+            var integrante = new Integrante
+            {
+                GrupoId = grupo.Id,
+                UsuarioId = AppUser.GetUserId()
+            };
+
+            await _integranteService.Adicionar(integrante);
+
+            return CustomResponse();
+        }
+
+        [HttpGet("grupos-participantes")]
+        public async Task<ActionResult<IEnumerable<GrupoViewModel>>> ObterGruposUsuario()
+        {
+            var usuario = AppUser.GetUserId();
+            var participante = await _integranteRepository.ObterGruposParticipante(usuario);
+
+            var gruposUsuario = await Task.WhenAll(participante.Select(a => _grupoRepository.ObterPorId(a.GrupoId)));
+
+            var grupos = _mapper.Map<IEnumerable<GrupoViewModel>>(gruposUsuario.ToList());
+
+            return CustomResponse(grupos);
+        }
     }
 
 }

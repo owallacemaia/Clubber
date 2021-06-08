@@ -41,6 +41,10 @@ namespace Club.Data.Mappings
                 .WithOne(x => x.Usuario)
                 .HasForeignKey(x => x.UsuarioId);
 
+            builder.HasMany(x => x.Participados)
+                .WithOne(x => x.Usuario)
+                .HasForeignKey(x => x.UsuarioId);
+
             builder.ToTable("Usuarios");
 
         }
