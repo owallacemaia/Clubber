@@ -31,6 +31,5 @@ namespace Club.Business.Models
         public IEnumerable<Post> Posts { get; set; }
         public IEnumerable<PostFeed> PostsFeed { get; set; }
         public IEnumerable<Seguidor> Seguidor { get; set; }
-        public IEnumerable<Integrante> Participados { get; set; }
     }
 }

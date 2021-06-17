@@ -42,9 +42,33 @@ namespace Club.WebApi.Controllers
         [HttpGet]
         public async Task<IEnumerable<GrupoViewModel>> ObterTodos()
         {
-            var grupos = _mapper.Map<IEnumerable<GrupoViewModel>>(await _grupoRepository.ObterTodos());
+            var grupos = await _grupoRepository.ObterTodos();
 
-            return (grupos);
+            var usuarioId = AppUser.GetUserId();
+            var participante = await _integranteRepository.ObterGruposParticipante(usuarioId);
+
+            var gruposParticipo = await Task.WhenAll(participante.Select(a => _grupoRepository.ObterPorId(a.GrupoId)));
+
+            
+
+            foreach (Grupo grupo in gruposParticipo)
+            {
+                var remover = grupos.Where(a => a.Id == grupo.Id).FirstOrDefault();
+                grupos.Remove(remover);
+            }
+
+            var gruposUsuario = await _grupoRepository.ObterGruposUsuario(usuarioId);
+            
+            foreach (Grupo grupo in gruposUsuario)
+            {
+                var remover = grupos.Where(a => a.Id == grupo.Id).FirstOrDefault();
+                grupos.Remove(remover);
+            }
+
+
+            var gruposSeprardos = _mapper.Map<IEnumerable<GrupoViewModel>>(grupos);
+
+            return (gruposSeprardos);
         }
 
         [HttpGet("{id:guid}")]

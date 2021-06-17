@@ -4,14 +4,16 @@ using Club.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Club.Data.Migrations
 {
     [DbContext(typeof(ClubberContext))]
-    partial class ClubberContextModelSnapshot : ModelSnapshot
+    [Migration("20210611005239_AttIntegrantes")]
+    partial class AttIntegrantes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
