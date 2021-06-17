@@ -25,8 +25,16 @@ namespace Club.Business.Services
         public async Task<bool> Adicionar(Integrante integrante)
         {
             var grupo = await _grupoRepository.ObterPorId(integrante.GrupoId);
-            
+
             if (grupo.Id != integrante.GrupoId) return false;
+
+            var integrateExistente = await _integranteRepository.ObterIntegranteExistente(integrante.UsuarioId, integrante.GrupoId);
+
+            if (integrateExistente != null)
+            {
+                Notificar("Usuario já está no grupo");
+                return false;
+            }
 
             await _integranteRepository.Adicionar(integrante);
 

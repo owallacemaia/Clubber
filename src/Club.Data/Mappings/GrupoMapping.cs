@@ -22,6 +22,10 @@ namespace Club.Data.Mappings
                 .WithOne(x => x.Grupo)
                 .HasForeignKey(x => x.GrupoId);
 
+            builder.HasMany(x => x.Integrantes)
+                .WithOne(x => x.Grupo)
+                .HasForeignKey(x => x.GrupoId);
+
             builder.ToTable("Grupos");
         }
     }

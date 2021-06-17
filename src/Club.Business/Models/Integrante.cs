@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Club.Business.Models
 {
@@ -11,6 +7,6 @@ namespace Club.Business.Models
         public Guid UsuarioId { get; set; }
         public Guid GrupoId { get; set; }
 
-        public Usuario Usuario { get; set; }
+        public Grupo Grupo { get; set; }
     }
 }

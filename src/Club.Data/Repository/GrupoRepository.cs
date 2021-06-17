@@ -29,9 +29,9 @@ namespace Club.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Grupo>> ObterGruposUsuario(Guid grupoId)
+        public async Task<IEnumerable<Grupo>> ObterGruposUsuario(Guid usuarioId)
         {
-            return await Db.Grupos.AsNoTracking().Where(a => a.Id == grupoId).ToListAsync();
+            return await Db.Grupos.AsNoTracking().Where(a => a.UsuarioId == usuarioId).ToListAsync();
         }
 
         public async Task<Grupo> ObterGrupoUsuario(Guid usuarioId)

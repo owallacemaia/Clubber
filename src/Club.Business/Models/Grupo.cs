@@ -18,5 +18,6 @@ namespace Club.Business.Models
 
         public Usuario Usuario { get; set; }
         public IEnumerable<Post> Posts { get; set; }
+        public ICollection<Integrante> Integrantes { get; set; }
     }
 }

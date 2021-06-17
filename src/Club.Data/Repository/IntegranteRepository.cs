@@ -17,5 +17,11 @@ namespace Club.Data.Repository
         {
             return await Db.Integrantes.AsNoTracking().Where(a => a.UsuarioId == usuarioId).ToListAsync();
         }
+
+        public async Task<Integrante> ObterIntegranteExistente(Guid usuarioId, Guid grupoId)
+        {
+            return await Db.Integrantes.AsNoTracking()
+                .FirstOrDefaultAsync(a => a.GrupoId == grupoId && a.UsuarioId == usuarioId);
+        }
     }
 }
